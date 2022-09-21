@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - name: Ensure Docker image is built from the test Dockerfile.
+      docker_image:
+        name: test_ansible
+        source: build
+        build:
+          path: dockerfiles
+        state: present
+
+    - name: Ensure the test container is running.
+      docker_container:
+        image: test_ansible:latest
+        name: test_ansible_container
+        ports:
+         - "8082:80"
+        state: stopped
